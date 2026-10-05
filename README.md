@@ -107,24 +107,24 @@ hydromind/
 
 
 * **Frontend**: Modern JavaScript framework with responsive metric charts and risk indicators.
-
-##**System Architecture & Workflow**
+ 
+## **System Architecture & Workflow**
 
 [Wake from Deep Sleep] 
-       │
-       ▼
-[1. Read Temperature] ──> (DS18B20 OneWire poll)
-       │
-       ▼
-[2. Read Turbidity]   ──> (ADC analog voltage read)
-       │
-       ▼
-[3. Capture Frame]    ──> (ESP32-CAM frame snap & immediate buffer release)
-       │
-       ▼
-[4. Wi-Fi Transmission] ──> (Stream raw sensor payload & image via HTTP POST over personal hotspot)
-       │
-       ▼
+
+       
+[1. Read Temperature] (DS18B20 OneWire poll)
+       
+       
+[2. Read Turbidity]   (ADC analog voltage read)
+       
+       
+[3. Capture Frame]   (ESP32-CAM frame snap & immediate buffer release)
+       
+       
+[4. Wi-Fi Transmission] (Stream raw sensor payload & image via HTTP POST over personal hotspot)
+       
+       
 [Go Back to Deep Sleep]
 
 ---
