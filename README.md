@@ -122,10 +122,7 @@ hydromind/
 [3. Capture Frame]    ──> (ESP32-CAM frame snap & immediate buffer release)
        │
        ▼
-[4. Local AI Engine]  ──> (Run TFLite micro model on the combined vector)
-       │
-       ▼
-[5. Wi-Fi Broadcast]  ──> (Transmit final 0–100 score via local Wi-Fi / personal hotspot)
+[4. Wi-Fi Transmission] ──> (Stream raw sensor payload & image via HTTP POST over personal hotspot)
        │
        ▼
 [Go Back to Deep Sleep]
