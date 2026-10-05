@@ -108,7 +108,27 @@ hydromind/
 
 * **Frontend**: Modern JavaScript framework with responsive metric charts and risk indicators.
 
+##**System Architecture & Workflow**
 
+[Wake from Deep Sleep] 
+       │
+       ▼
+[1. Read Temperature] ──> (DS18B20 OneWire poll)
+       │
+       ▼
+[2. Read Turbidity]   ──> (ADC analog voltage read)
+       │
+       ▼
+[3. Capture Frame]    ──> (ESP32-CAM frame snap & immediate buffer release)
+       │
+       ▼
+[4. Local AI Engine]  ──> (Run TFLite micro model on the combined vector)
+       │
+       ▼
+[5. Wi-Fi Broadcast]  ──> (Transmit final 0–100 score via local Wi-Fi / personal hotspot)
+       │
+       ▼
+[Go Back to Deep Sleep]
 
 ---
 
@@ -154,7 +174,7 @@ docker-compose up --build
 
 ## **Team Responsibilities**
 
-* **Member 1 (Embedded Systems)**: Firmware development, sensor wiring, and low-power power management.
-* **Member 2 (Backend Architecture)**: FastAPI REST endpoints, WebSocket streaming, and database integration.
-* **Member 3 (Machine Learning & CV)**: OpenCV image feature extraction pipelines and `RandomForestRegressor` optimization.
-* **Member 4 (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
+* **Ashmit (Embedded Systems)**: Firmware development, sensor wiring, and low-power power management.
+* **Badri (Backend Architecture)**: FastAPI REST endpoints, WebSocket streaming, and database integration.
+* **Shaurya (Machine Learning & CV)**: OpenCV image feature extraction pipelines and `RandomForestRegressor` optimization.
+* **Ganesh (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
