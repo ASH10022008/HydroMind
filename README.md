@@ -1,46 +1,41 @@
-# Hydromind: Real-Time IoT Water Quality Index Platform
+# Hydromind: Real-Time IoT Water Quality Index (WQI) Platform
 
-Hydromind is an automated, continuous, low-cost IoT and Edge AI platform designed to track water safety. It replaces slow, traditional laboratory water testing with real-time telemetry capture, computer vision, and machine learning regression models to calculate an instant Water Quality Index (WQI) pollution score.
+Hydromind is an automated, continuous, low-cost IoT and Edge AI platform designed to track water safety at individual leisure sites (resorts, pools, waterparks). Unlike AQI (Air Quality Index), which monitors ambient air quality across regions, **Hydromind brings decentralized, location-specific Water Quality Index (WQI) monitoring directly to the point of use** — enabling real-time transparency for guests and operators without relying on centralized municipal reporting.
+
+Instead of slow, traditional laboratory water testing, Hydromind captures multi-modal sensor telemetry and AI-powered predictions on the edge, hosting a live dashboard accessible via smartphone or QR code.
+
+---
+
+## **Why WQI is Different from AQI**
+
+| Aspect | AQI (Air Quality) | WQI (Water Quality) |
+|--------|------------------|-------------------|
+| **Scope** | Regional / citywide atmospheric monitoring | Decentralized, location-specific water bodies |
+| **Deployment Model** | Centralized government/municipal stations | Distributed edge devices at each water site |
+| **Data Accessibility** | Public broadcasts (weather, gov websites) | Private, guest-facing, real-time per facility |
+| **Use Case** | General population health awareness | Facility operators & direct swimmers/guests |
+| **Monitoring Frequency** | Hourly or daily averages | Continuous, real-time edge processing |
+
+Hydromind's **decentralized architecture** means each resort, pool, or waterpark maintains its own independent WQI system—no reliance on central authorities or delayed municipal reports.
 
 ---
 
 ## **System Architecture & Workflow**
 
 1. **Edge Telemetry & Vision Capture**:
-* An ESP32 microcontroller paired with a DS18B20 temperature probe and turbidity sensor gathers physical water telemetry.
-
-
-* An ESP32-CAM captures live video frames to analyze water color, clarity, and suspended particle features using OpenCV.
-
-
-
+   * An ESP32 microcontroller paired with a DS18B20 temperature probe and turbidity sensor gathers physical water telemetry.
+   * An ESP32-CAM captures live video frames to analyze water color, clarity, and suspended particle features using OpenCV.
 
 2. **AI & Regression Processing**:
-* A FastAPI backend ingests the combined sensor payloads and runs them through a `RandomForestRegressor` machine learning pipeline.
-
-
-* The system computes a unified **Pollution Score from 0 to 100**:
-
-
-* **0–30**: Clean (Safe)
-
-
-* **31–60**: Moderate (Caution)
-
-
-* **61–100**: Hazardous (Critical Alert)
-
-
-
-
-
+   * A FastAPI backend ingests the combined sensor payloads and runs them through a `RandomForestRegressor` machine learning pipeline.
+   * The system computes a unified **Water Quality Index (WQI) from 0 to 100**:
+     * **0–30**: Optimal (Safe)
+     * **31–60**: Caution (Moderate Risk)
+     * **61–100**: Closed/Hazardous (Critical Alert)
 
 3. **Dashboard Visualization**:
-* End-users and municipal stakeholders monitor real-time sensor metrics, trend charts, and risk category alerts via a responsive web dashboard.
-
-
-
-
+   * End-users, guests, and facility operators monitor real-time sensor metrics, trend charts, and risk category alerts via a responsive web dashboard.
+   * QR codes enable guests to check water safety before entering.
 
 ---
 
@@ -98,34 +93,27 @@ hydromind/
 ## **Tech Stack**
 
 * **Hardware**: ESP32, ESP32-CAM, DS18B20 Temperature Probe, Turbidity Sensor.
-
-
 * **Backend**: Python 3.10+, FastAPI, Uvicorn, WebSockets.
-
-
 * **Machine Learning & Vision**: OpenCV, Scikit-Learn (`RandomForestRegressor`).
-
-
 * **Frontend**: Modern JavaScript framework with responsive metric charts and risk indicators.
- 
-## **System Architecture & Workflow**
 
+---
+
+## **Edge Firmware Workflow**
+
+```
 [Wake from Deep Sleep] 
-
-       
+       ↓
 [1. Read Temperature] (DS18B20 OneWire poll)
-       
-       
-[2. Read Turbidity]   (ADC analog voltage read)
-       
-       
-[3. Capture Frame]   (ESP32-CAM frame snap & immediate buffer release)
-       
-       
-[4. Wi-Fi Transmission] (Stream raw sensor payload & image via HTTP POST over personal hotspot)
-       
-       
+       ↓
+[2. Read Turbidity] (ADC analog voltage read)
+       ↓
+[3. Capture Frame] (ESP32-CAM frame snap & immediate buffer release)
+       ↓
+[4. Wi-Fi Transmission] (Stream raw sensor payload & image via HTTP POST)
+       ↓
 [Go Back to Deep Sleep]
+```
 
 ---
 
@@ -175,3 +163,9 @@ docker-compose up --build
 * **Badri (Backend Architecture)**: FastAPI REST endpoints, WebSocket streaming, and database integration.
 * **Shaurya (Machine Learning & CV)**: OpenCV image feature extraction pipelines and `RandomForestRegressor` optimization.
 * **Ganesh (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
+
+---
+
+## **License**
+
+MIT License — See LICENSE file for details.
