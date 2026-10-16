@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hydromind (Vanilla Live View)</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <div class="header">
+        <h1>Hydromind</h1>
+        <p>Real-Time Edge Telemetry & WQI</p>
+      </div>
+
+      <div class="feed-box">
+        <img id="cameraFeed" src="" alt="Camera stream" />
+      </div>
+
+      <div class="metrics">
+        <div class="card">
+          <div class="label">Temperature</div>
+          <div class="value" id="temperature">--</div>
+        </div>
+        <div class="card">
+          <div class="label">Color</div>
+          <div class="value" id="color">--</div>
+        </div>
+        <div class="card">
+          <div class="label">Turbidity sensor output</div>
+          <div class="value" id="turbidity">--</div>
+        </div>
+        <div class="card wqi-card">
+          <div class="label">Predicted WQI Index</div>
+          <div class="value" id="wqi">--</div>
+        </div>
+      </div>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

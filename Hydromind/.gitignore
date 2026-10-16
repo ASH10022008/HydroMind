@@ -1,0 +1,19 @@
+# Python
+__pycache__/
+*.py[cod]
+*.egg-info/
+.venv/
+venv/
+.pytest_cache/
+
+# Model artefacts (regenerate with `python -m ml.train`)
+ml/models/*.joblib
+ml/models/*.json
+ml/models/*.csv
+
+# Generated datasets
+ml/datasets/*.csv
+ml/datasets/training_log.json
+
+# Notebooks
+.ipynb_checkpoints/
