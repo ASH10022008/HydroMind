@@ -162,7 +162,7 @@ docker-compose up --build
 * **Ashmit (Embedded Systems)**: Firmware development, sensor wiring, and low-power power management.
 * **Badri (Backend Architecture)**: FastAPI REST endpoints, WebSocket streaming, and database integration.
 * **Shaurya (Machine Learning & CV)**: OpenCV image feature extraction pipelines and `RandomForestRegressor` optimization.
-* **Ganesh (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
+* **Logesh (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
 
 ---
 
