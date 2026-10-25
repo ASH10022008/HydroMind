@@ -1,55 +1,171 @@
-# Hydromind
+# Hydromind: Real-Time IoT Water Quality Index (WQI) Platform
 
-Hydromind combines ESP32 water-sensor readings, a trained ML model, and a
-browser dashboard to show an experimental Water Quality Index (WQI).
+Hydromind is an automated, continuous, low-cost IoT and Edge AI platform designed to track water safety at individual leisure sites (resorts, pools, waterparks). Unlike AQI (Air Quality Index), which monitors ambient air quality across regions, **Hydromind brings decentralized, location-specific Water Quality Index (WQI) monitoring directly to the point of use** — enabling real-time transparency for guests and operators without relying on centralized municipal reporting.
 
-## Project parts
+Instead of slow, traditional laboratory water testing, Hydromind captures multi-modal sensor telemetry and AI-powered predictions on the edge, hosting a live dashboard accessible via smartphone or QR code.
 
-- `firmware/` reads water temperature, turbidity voltage, and camera RGB, then
-  posts telemetry to the backend.
-- `backend/` receives ESP32 telemetry, runs ML inference, and exposes the
-  latest readings and WQI through an HTTP API.
-- `ml/` contains the training pipeline and the model inference code.
-- `frontend/` displays live sensor readings and a separate WQI score tab.
+---
 
-## Train the model
+## **Why WQI is Different from AQI**
 
-Install the ML dependencies and train the model from the project root:
+| Aspect | AQI (Air Quality) | WQI (Water Quality) |
+|--------|------------------|-------------------|
+| **Scope** | Regional / citywide atmospheric monitoring | Decentralized, location-specific water bodies |
+| **Deployment Model** | Centralized government/municipal stations | Distributed edge devices at each water site |
+| **Data Accessibility** | Public broadcasts (weather, gov websites) | Private, guest-facing, real-time per facility |
+| **Use Case** | General population health awareness | Facility operators & direct swimmers/guests |
+| **Monitoring Frequency** | Hourly or daily averages | Continuous, real-time edge processing |
 
-```bash
-python -m pip install -r ml/requirements.txt
-python -m ml.train
+Hydromind's **decentralized architecture** means each resort, pool, or waterpark maintains its own independent WQI system—no reliance on central authorities or delayed municipal reports.
+
+---
+
+## **System Architecture & Workflow**
+
+1. **Edge Telemetry & Vision Capture**:
+   * An ESP32 microcontroller paired with a DS18B20 temperature probe and turbidity sensor gathers physical water telemetry.
+   * An ESP32-CAM captures live video frames to analyze water color, clarity, and suspended particle features using OpenCV.
+
+2. **AI & Regression Processing**:
+   * A FastAPI backend ingests the combined sensor payloads and runs them through a `RandomForestRegressor` machine learning pipeline.
+   * The system computes a unified **Water Quality Index (WQI) from 0 to 100**:
+     * **0–30**: Optimal (Safe)
+     * **31–60**: Caution (Moderate Risk)
+     * **61–100**: Closed/Hazardous (Critical Alert)
+
+3. **Dashboard Visualization**:
+   * End-users, guests, and facility operators monitor real-time sensor metrics, trend charts, and risk category alerts via a responsive web dashboard.
+   * QR codes enable guests to check water safety before entering.
+
+---
+
+## **Repository Structure**
+
+```text
+hydromind/
+│
+├── firmware/                  # Embedded Systems (ESP32 / ESP32-CAM)
+│   ├── include/               # Header files & sensor pin configurations
+│   ├── src/
+│   │   ├── main.cpp           # Main loop, deep sleep & Wi-Fi management
+│   │   ├── sensor_handler.cpp # DS18B20 & Turbidity reading logic
+│   │   └── camera_stream.cpp  # ESP32-CAM frame capture & HTTP post
+│   └── platformio.ini         # PlatformIO project configuration
+│
+├── backend/                   # Cloud & API Architecture (FastAPI)
+│   ├── app/
+│   │   ├── api/               # API routers (telemetry, alerts)
+│   │   ├── core/              # Config, security, database connections
+│   │   ├── models/            # Database schemas & Pydantic models
+│   │   ├── services/          # Business logic & WebSocket manager
+│   │   └── main.py            # FastAPI application entry point
+│   ├── Dockerfile             # Container configuration for backend
+│   └── requirements.txt       # Python dependencies
+│
+├── ml/                        # Computer Vision & ML Pipeline
+│   ├── datasets/              # Sample images and training logs
+│   ├── notebooks/             # Jupyter notebooks for model experimentation
+│   ├── models/                # Saved model weights (.pkl / .joblib)
+│   ├── inference.py           # OpenCV processing & sklearn prediction wrapper
+│   └── train.py               # Model training script
+│
+├── frontend/                  # User Dashboard (Web / Mobile)
+│   ├── public/                # Static assets & icons
+│   ├── src/
+│   │   ├── components/        # UI elements (Charts, Alert Banners, Gauges)
+│   │   ├── views/             # Dashboard screens & layout views
+│   │   ├── services/          # API & WebSocket client hooks
+│   │   ├── App.jsx            # Root component
+│   │   └── main.jsx           # Frontend entry point
+│   └── package.json           # Node.js dependencies
+│
+├── docs/                      # Documentation & SRS
+│   ├── srs.md                 # Full Software Requirements Specification
+│   └── architecture.png       # System design diagrams
+│
+├── docker-compose.yml         # Local multi-service orchestration
+└── README.md                  # Project overview and instructions
+
 ```
 
-Training creates `ml/models/hydromind_wqi_model.joblib`. The WQI endpoint
-reports an actionable message until this file has been generated.
-The demo classifies camera RGB as Brown, Green, or Blue; Blue has a lower
-color-risk contribution to WQI. If you change the demo color bands or scoring
-logic, retrain with `python -m ml.train` before restarting the backend.
+---
 
-## Run the app
+## **Tech Stack**
 
-Start the backend from the project root:
+* **Hardware**: ESP32, ESP32-CAM, DS18B20 Temperature Probe, Turbidity Sensor.
+* **Backend**: Python 3.10+, FastAPI, Uvicorn, WebSockets.
+* **Machine Learning & Vision**: OpenCV, Scikit-Learn (`RandomForestRegressor`).
+* **Frontend**: Modern JavaScript framework with responsive metric charts and risk indicators.
 
-```bash
-node backend/server.js
+---
+
+## **Edge Firmware Workflow**
+
+```
+[Wake from Deep Sleep] 
+       ↓
+[1. Read Temperature] (DS18B20 OneWire poll)
+       ↓
+[2. Read Turbidity] (ADC analog voltage read)
+       ↓
+[3. Capture Frame] (ESP32-CAM frame snap & immediate buffer release)
+       ↓
+[4. Wi-Fi Transmission] (Stream raw sensor payload & image via HTTP POST)
+       ↓
+[Go Back to Deep Sleep]
 ```
 
-Serve the frontend in another terminal:
+---
+
+## **Getting Started**
+
+### **1. Prerequisites**
+
+* Python 3.10+
+* Node.js & npm (for frontend)
+* PlatformIO (for ESP32 firmware flashing)
+* Docker & Docker Compose (optional, for running containers locally)
+
+### **2. Running the Backend**
+
+```bash
+cd backend
+python -m venv venv
+source venv/bin/activate  # On Windows: venv\Scripts\activate
+pip install -r requirements.txt
+uvicorn app.main:app --reload
+
+```
+
+### **3. Running the Frontend**
 
 ```bash
 cd frontend
-python -m http.server 5500
+npm install
+npm run dev
+
 ```
 
-Open http://localhost:5500. If the required Python interpreter is not named
-`python` on Windows or `python3` on other platforms, set the `PYTHON`
-environment variable before starting the backend.
+### **4. Running via Docker Compose**
 
-The frontend reads `/api/data`; the WQI is also available directly from
-`/api/wqi`. The ESP32 posts to `/api/esp` every five seconds. Update
-`BACKEND_URL` in `firmware/src/main.cpp` to use the computer's LAN IP address
-and keep the device and backend on the same network.
+To spin up the backend and supporting services together:
 
-WQI scores are experimental model estimates, not a substitute for certified
-water testing.
+```bash
+docker-compose up --build
+
+```
+
+---
+
+## **Team Responsibilities**
+
+* **Ashmit (Embedded Systems)**: Firmware development, sensor wiring, and low-power power management.
+* **Badri (Backend Architecture)**: FastAPI REST endpoints, WebSocket streaming, and database integration.
+* **Shaurya (Machine Learning & CV)**: OpenCV image feature extraction pipelines and `RandomForestRegressor` optimization.
+* **Logesh (Frontend Dashboard)**: UI components, real-time data visualization charts, and alert status panels.
+
+---
+
+## **License**
+
+MIT License — See LICENSE file for details.
