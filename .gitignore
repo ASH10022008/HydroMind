@@ -1,0 +1,14 @@
+# Ignore secrets file with credentials
+src/secrets.h
+
+# Ignore platformio upload flags
+*.upload.*
+
+# Ignore build artifacts
+.build/
+*.hex
+*.eep
+*.bint
+
+# Ignore monitor temp files
+.tmp

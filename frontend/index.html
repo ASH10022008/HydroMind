@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Hydromind</title>
+    <link rel="stylesheet" href="./styles.css" />
+  </head>
+  <body>
+    <div class="container">
+      <nav class="tabs" role="tablist" aria-label="Water monitoring views">
+        <button class="tab active" id="dashboardTab" type="button" role="tab" aria-selected="true" aria-controls="dashboardPanel">
+          Dashboard
+        </button>
+        <button class="tab" id="wqiTab" type="button" role="tab" aria-selected="false" aria-controls="wqiPanel">
+          WQI score
+        </button>
+      </nav>
+
+      <section id="dashboardPanel" role="tabpanel" aria-labelledby="dashboardTab">
+        <div class="feed-box">
+          <img id="cameraFeed" src="" alt="Camera stream" />
+        </div>
+
+        <div class="metrics">
+          <div class="card">
+            <div class="label">Temperature</div>
+            <div class="value" id="temperature">--</div>
+          </div>
+          <div class="card">
+            <div class="label">Color</div>
+            <div class="value" id="color">--</div>
+          </div>
+          <div class="card">
+            <div class="label">Turbidity sensor output</div>
+            <div class="value" id="turbidity">--</div>
+          </div>
+        </div>
+      </section>
+
+      <section id="wqiPanel" class="wqi-panel" role="tabpanel" aria-labelledby="wqiTab" hidden>
+        <div class="wqi-card">
+          <div class="label">Water Quality Index</div>
+          <div class="wqi-score"><span id="wqiScore">--</span><span class="wqi-total">/ 100</span></div>
+          <div id="wqiCategory" class="wqi-category">Waiting for sensor data</div>
+          <div class="wqi-progress" role="progressbar" aria-label="WQI score" aria-valuemin="0" aria-valuemax="100">
+            <div id="wqiProgress" class="wqi-progress-fill"></div>
+          </div>
+          <p id="wqiMessage" class="wqi-message" aria-live="polite">Connect the sensors and train the WQI model to see a score.</p>
+        </div>
+
+        <div class="metrics wqi-metrics">
+          <div class="card">
+            <div class="label">Turbidity estimate</div>
+            <div class="value" id="wqiNtu">--</div>
+          </div>
+          <div class="card">
+            <div class="label">Estimated dissolved oxygen</div>
+            <div class="value" id="wqiOxygen">--</div>
+          </div>
+          <div class="card">
+            <div class="label">Score updated</div>
+            <div class="value wqi-updated" id="wqiUpdatedAt">--</div>
+          </div>
+        </div>
+
+        <p class="wqi-disclaimer">Experimental model estimate; not a substitute for certified water testing.</p>
+      </section>
+    </div>
+
+    <script src="./app.js"></script>
+  </body>
+</html>

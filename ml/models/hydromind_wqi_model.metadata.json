@@ -1,0 +1,55 @@
+{
+  "model_version": "1.2.0",
+  "feature_names": [
+    "ntu",
+    "temperature_c",
+    "dissolved_o2",
+    "red_mean",
+    "green_mean",
+    "blue_mean",
+    "clarity_index"
+  ],
+  "target": "wqi",
+  "n_samples": 8000,
+  "n_estimators": 300,
+  "max_depth": 14,
+  "seed": 42,
+  "metrics": {
+    "mae": 0.32701246488786645,
+    "rmse": 0.7073240108935115,
+    "r2": 0.993694059339484,
+    "cv_r2_mean": 0.9935498313872884,
+    "cv_r2_std": 0.0005267093402863372
+  },
+  "feature_importances": {
+    "ntu": 0.544291021636911,
+    "blue_mean": 0.3281934726262763,
+    "temperature_c": 0.09921241067465794,
+    "dissolved_o2": 0.012765883683082919,
+    "red_mean": 0.008836470785631812,
+    "green_mean": 0.006120126005005617,
+    "clarity_index": 0.0005806145884343864
+  },
+  "wqi_bands": [
+    {
+      "low": 0.0,
+      "high": 30.0,
+      "label": "Optimal",
+      "severity": "good"
+    },
+    {
+      "low": 30.0,
+      "high": 60.0,
+      "label": "Caution",
+      "severity": "moderate"
+    },
+    {
+      "low": 60.0,
+      "high": 100.0,
+      "label": "Closed",
+      "severity": "critical"
+    }
+  ],
+  "trained_at": "2026-10-20T07:23:04",
+  "train_seconds": 25.563
+}
